@@ -12,7 +12,8 @@ var zhyd = window.zhyd || {
             uploadUrl: "",
             uploadFileName: "file",
             uploadType: "",
-            customCss: {}
+            customCss: {},
+            content: ""
 
         },
         init: function (options) {
@@ -31,6 +32,7 @@ var zhyd = window.zhyd || {
                 // 监控变化，同步更新到 textarea
                 $contentBox.val(html);
             };
+            editor.html($("#editor").html());
             // 注册上传文件插件
             zhyd.wangEditor.plugins.registerUpload(editor, config.uploadUrl, config.uploadFileName, config.uploadType, function (result, curEditor) {
                 // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
@@ -141,8 +143,6 @@ var zhyd = window.zhyd || {
                         })
                     }, 50);
                 })
-
-
             }
         }
     }

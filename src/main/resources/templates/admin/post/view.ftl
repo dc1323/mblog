@@ -30,7 +30,8 @@
                             <input type="text" class="form-control" name="title" value="${view.title}" maxlength="64" placeholder="文章标题" required >
                         </div>
                         <div class="form-group">
-                            <#include "/admin/editor/${editor}.ftl"/>
+                            <!-- /admin/editor/ -->
+                            <#include "/classic/channel/editor/${editor}.ftl"/>
                         </div>
                     </div>
                 </div>

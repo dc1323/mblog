@@ -165,6 +165,7 @@ abbr[data-original-title], abbr[title] {
     color: #fff;
     background-color: #03a9f4;
     border-color: #03a9f4;
+    font-weight: bold;
 }
 
 .btn-primary:hover {

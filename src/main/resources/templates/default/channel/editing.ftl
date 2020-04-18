@@ -25,7 +25,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <#include "/default/channel/editor/${editor}.ftl"/>
+                <!-- /default/channel/editor/ -->
+                <#include "/classic/channel/editor/${editor}.ftl"/>
             </div>
         </div>
         <div class="col-xs-12 col-md-4">

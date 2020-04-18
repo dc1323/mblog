@@ -58,7 +58,6 @@ $(function() {
 	// delete
 	$('a[data-evt=trash]').click(function () {
 		var id = $(this).attr('data-id');
-
 		layer.confirm('确定删除此项吗?', {
             btn: ['确定','取消'], //按钮
             shade: false //不显示遮罩
@@ -71,7 +70,6 @@ $(function() {
 			});
 
         }, function(){
-
         });
 	});
 	
