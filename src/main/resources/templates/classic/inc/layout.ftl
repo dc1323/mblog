@@ -8,7 +8,7 @@
     <!--[if IE]>
     <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'/>
     <![endif]-->
-    <meta name="keywords" content="mtons, ${keywords?default(options['site_keywords'])}">
+    <meta name="keywords" content="${keywords?default(options['site_keywords'])}">
     <meta name="description" content="${description?default(options['site_description'])}">
     <meta name="mtons:mblog" content="${site.version}">
     ${options['site_metas']}
