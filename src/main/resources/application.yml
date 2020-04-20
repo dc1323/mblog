@@ -1,5 +1,5 @@
 server:
-    port: 80
+    port: 8080
     use-forward-headers: true
     undertow:
         io-threads: 2
@@ -62,6 +62,8 @@ logging:
     level:
         org.springframework: WARN
         org.hibernate: WARN
+        com.github.binarywang.demo.wx.mp: DEBUG
+        me.chanjar.weixin: DEBUG
 
 # site.options.theme: [default|classic]
 site:
@@ -85,3 +87,11 @@ site:
         editor: ueditor
         thumbnail_channel_size: 200x112
         thumbnail_post_size: 360x200
+
+wx:
+    mp:
+        configs:
+            - appId: wx22964f0e2359b015
+              secret: wx22964f0e2359b015
+              token: lyl365
+              aesKey: e8iBeLchTw4bHITCH9pUpkwW6zecydCnsWtYVwb84sp
