@@ -14,9 +14,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 根据作者取评论列表
- *
- * @author landy
- * @since 3.0
  */
 @Component
 public class UserCommentsDirective extends TemplateDirective {

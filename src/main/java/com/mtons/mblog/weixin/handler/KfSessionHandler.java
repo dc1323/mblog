@@ -1,5 +1,6 @@
 package com.mtons.mblog.weixin.handler;
 
+import com.mtons.mblog.web.formatter.JsonUtils;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
@@ -8,9 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * @author Binary Wang(https://github.com/binarywang)
- */
 @Component
 public class KfSessionHandler extends AbstractHandler {
 
@@ -18,7 +16,7 @@ public class KfSessionHandler extends AbstractHandler {
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
                                     Map<String, Object> context, WxMpService wxMpService,
                                     WxSessionManager sessionManager) {
-        //TODO 对会话做处理
+        this.logger.info("\n对会话做处理，内容：{}", JsonUtils.toJson(wxMessage));
         return null;
     }
 

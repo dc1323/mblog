@@ -1,0 +1,70 @@
+{
+  "groups": [
+    {
+      "name": "site",
+      "type": "com.mtons.mblog.config.SiteOptions",
+      "sourceType": "com.mtons.mblog.config.SiteOptions"
+    },
+    {
+      "name": "site.controls",
+      "type": "com.mtons.mblog.config.SiteOptions$Controls",
+      "sourceType": "com.mtons.mblog.config.SiteOptions",
+      "sourceMethod": "getControls()"
+    },
+    {
+      "name": "wx.mp",
+      "type": "com.mtons.mblog.weixin.config.WxMpProperties",
+      "sourceType": "com.mtons.mblog.weixin.config.WxMpProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "site.controls.comment",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.mtons.mblog.config.SiteOptions$Controls",
+      "defaultValue": false
+    },
+    {
+      "name": "site.controls.post",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.mtons.mblog.config.SiteOptions$Controls",
+      "defaultValue": false
+    },
+    {
+      "name": "site.controls.register",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.mtons.mblog.config.SiteOptions$Controls",
+      "defaultValue": false
+    },
+    {
+      "name": "site.controls.register-email-validate",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.mtons.mblog.config.SiteOptions$Controls",
+      "defaultValue": false
+    },
+    {
+      "name": "site.location",
+      "type": "java.lang.String",
+      "description": "运行文件存储路径",
+      "sourceType": "com.mtons.mblog.config.SiteOptions"
+    },
+    {
+      "name": "site.options",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "description": "属性配置",
+      "sourceType": "com.mtons.mblog.config.SiteOptions"
+    },
+    {
+      "name": "site.version",
+      "type": "java.lang.String",
+      "description": "系统版本号",
+      "sourceType": "com.mtons.mblog.config.SiteOptions"
+    },
+    {
+      "name": "wx.mp.configs",
+      "type": "java.util.List<com.mtons.mblog.weixin.config.WxMpProperties.MpConfig>",
+      "sourceType": "com.mtons.mblog.weixin.config.WxMpProperties"
+    }
+  ],
+  "hints": []
+}

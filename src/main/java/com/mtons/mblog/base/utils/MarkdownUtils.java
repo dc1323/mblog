@@ -13,10 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-/**
- * created by langhsu
- * on 2019/3/8
- */
 public class MarkdownUtils {
     /**
      * 插件

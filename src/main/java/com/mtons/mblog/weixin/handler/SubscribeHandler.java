@@ -2,7 +2,13 @@ package com.mtons.mblog.weixin.handler;
 
 import java.util.Map;
 
+import com.mtons.mblog.base.lang.Consts;
+import com.mtons.mblog.base.utils.MD5;
+import com.mtons.mblog.config.Constant;
+import com.mtons.mblog.modules.data.UserVO;
+import com.mtons.mblog.modules.service.UserService;
 import com.mtons.mblog.weixin.builder.TextBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -14,6 +20,8 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 @Component
 public class SubscribeHandler extends AbstractHandler {
+    @Autowired
+    private UserService userService;
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -22,12 +30,17 @@ public class SubscribeHandler extends AbstractHandler {
 
         this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUser());
 
-        // 获取微信用户基本信息
         try {
-            WxMpUser userWxInfo = weixinService.getUserService()
-                .userInfo(wxMessage.getFromUser(), null);
+            WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
             if (userWxInfo != null) {
-                // TODO 可以添加关注用户到本地数据库
+                // 可以添加关注用户到本地数据库
+                UserVO user = new UserVO();
+                user.setUsername(userWxInfo.getOpenId());
+                user.setAvatar(userWxInfo.getHeadImgUrl());
+                user.setPassword(MD5.md5(Constant.DEFAULT_PASSWORD));
+                user.setName(userWxInfo.getNickname());
+                user.setStatus(0);
+                userService.register(user);
             }
         } catch (WxErrorException e) {
             if (e.getError().getErrorCode() == 48001) {

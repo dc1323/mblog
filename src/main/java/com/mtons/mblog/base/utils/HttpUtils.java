@@ -1,49 +1,149 @@
-/*
-+--------------------------------------------------------------------------
-|   Mblog [#RELEASE_VERSION#]
-|   ========================================
-|   Copyright (c) 2014, 2015 mtons. All Rights Reserved
-|   http://www.mtons.com
-|
-+---------------------------------------------------------------------------
-*/
 package com.mtons.mblog.base.utils;
 
-import com.mtons.mblog.base.lang.MtonsException;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.util.Map;
+import java.util.*;
 
-/**
- * @author langhsu
- */
+@Slf4j
 public class HttpUtils {
+	private static RequestConfig requestConfig = null;
+	private static String charset = "utf-8";
 
-	private static HttpClient getClient() {
-		HttpClient client = new HttpClient();
-		client.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "utf-8"); 
-		return client;
+	public static void main(String[] args) {
+		JSONObject json = HttpUtils.httpGet(Constant.API_XIAO_HUA.replace("#MSG#", "笑话"));
+		System.out.println(json);
 	}
-	
-	public static String post(String url, Map<String, String> params) throws IOException {
-		HttpClient client = getClient();
-		
-    	PostMethod post = new PostMethod(url);
-    	
-    	for (Map.Entry<String, String> p : params.entrySet()) {
-    		post.addParameter(p.getKey(), p.getValue());
-    	}
-    	
-    	int status = client.executeMethod(post);
 
-    	if (status != HttpStatus.SC_OK) {
-    		throw new MtonsException("该地址请求失败");
-    	}
-    	return post.getResponseBodyAsString();
+	static {
+		// 设置请求和传输超时时间
+		requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000).build();
 	}
+
+	/**
+	 * @param url
+	 * @param obj 1. json字符串   2. map  3.JSONObject
+	 * @return JSONObject
+	 */
+	public static JSONObject httpPost(String url, Object obj) {
+		// post请求返回结果
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		JSONObject jsonResult = null;
+		HttpPost httpPost = new HttpPost(url);
+		// 设置请求和传输超时时间
+		httpPost.setConfig(requestConfig);
+		try {
+			if (null != obj) {
+				StringEntity entity = null;
+				if (obj instanceof String) {
+					entity = new StringEntity(obj.toString(), charset);
+				} else {
+					entity = new StringEntity(JSON.toJSONString(obj), charset);
+				}
+				entity.setContentEncoding(charset);
+				entity.setContentType("application/json");
+				httpPost.setEntity(entity);
+			}
+
+			log.debug(" {} - {} ", url, obj);
+			CloseableHttpResponse response = httpClient.execute(httpPost);
+			return convertResponse(response);
+		} catch (Exception e) {
+			log.error("error HttpClientUtils {} - {} - {}" + url, obj, e);
+		} finally {
+			httpPost.releaseConnection();
+		}
+		return jsonResult;
+	}
+
+	/**
+	 * post请求传输String参数 例如：name=Jack&sex=1&type=2
+	 * Content-type:application/x-www-form-urlencoded
+	 *
+	 * @param url url地址
+	 * @param
+	 * @return
+	 */
+	public static JSONObject httpPostForm(String url, Map<String, String> params) {
+		// post请求返回结果
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		JSONObject jsonResult = null;
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(requestConfig);
+
+		try {
+			if (null != params) {
+				//组织请求参数
+				List<NameValuePair> paramList = new ArrayList<NameValuePair>();
+				if (params != null && params.size() > 0) {
+					Set<String> keySet = params.keySet();
+					for (String key : keySet) {
+						paramList.add(new BasicNameValuePair(key, params.get(key)));
+					}
+				}
+				httpPost.setEntity(new UrlEncodedFormEntity(paramList, charset));
+			}
+
+			CloseableHttpResponse response = httpClient.execute(httpPost);
+			return convertResponse(response);
+		} catch (Exception e) {
+			log.error("post请求提交失败:" + url, e);
+		} finally {
+			httpPost.releaseConnection();
+		}
+		return jsonResult;
+	}
+
+	/**
+	 * 发送get请求
+	 *
+	 * @param url 路径
+	 * @return
+	 */
+	public static JSONObject httpGet(String url) {
+		// get请求返回结果
+		JSONObject jsonResult = null;
+		CloseableHttpClient client = HttpClients.createDefault();
+		// 发送get请求
+		HttpGet request = new HttpGet(url);
+		request.setConfig(requestConfig);
+		try {
+			CloseableHttpResponse response = client.execute(request);
+			jsonResult = convertResponse(response);
+		} catch (Exception e) {
+			log.error("get请求提交失败:" + url, e);
+		} finally {
+			request.releaseConnection();
+		}
+		return jsonResult;
+	}
+
+	private static JSONObject convertResponse(CloseableHttpResponse response) throws Exception {
+		// 请求发送成功，并得到响应
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			// 读取服务器返回过来的json字符串数据
+			HttpEntity entity = response.getEntity();
+			String strResult = EntityUtils.toString(entity, "utf-8");
+			// 把json字符串转换成json对象
+			return JSONObject.parseObject(strResult);
+		} else {
+			log.error(" {} ", response);
+		}
+		return null;
+	}
+
 }

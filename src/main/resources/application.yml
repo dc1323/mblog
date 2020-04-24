@@ -1,5 +1,5 @@
 server:
-    port: 8080
+    port: 80
     use-forward-headers: true
     undertow:
         io-threads: 2
@@ -92,6 +92,6 @@ wx:
     mp:
         configs:
             - appId: wx22964f0e2359b015
-              secret: wx22964f0e2359b015
+              secret: 1367996339237e262ba26afeb1f3f81b
               token: lyl365
-              aesKey: e8iBeLchTw4bHITCH9pUpkwW6zecydCnsWtYVwb84sp
+              aesKey: UNWB0xiXJgdAsWWoqJQEH1YUZRDRFPrZGcwQvuY9ogJ

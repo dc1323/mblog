@@ -15,5 +15,4 @@ public class TextBuilder extends AbstractBuilder {
             .build();
         return m;
     }
-
 }
